@@ -1,26 +1,75 @@
 class Recipe {
   String? title;
   String? photo;
-  String? calories;
   String? time;
   String? description;
 
-  List<Ingridient>? ingridients;
+  List<String>? ingredients; // Changed to List<String>
   List<TutorialStep>? tutorial;
-  List<Review>? reviews;
+  ClimateFootprint? climateFootprint;
 
-  Recipe({this.title, this.photo, this.calories, this.time, this.description, this.ingridients, this.tutorial, this.reviews});
+  String? servingsPerContainer;
+  String? servingSize;
+  String? calories;
+  Map<String, List<String>>? nutrients;
 
-  factory Recipe.fromJson(Map<String, Object> json) {
+  Recipe({
+    this.title,
+    this.photo,
+    this.time,
+    this.description,
+    this.ingredients,
+    this.tutorial,
+    this.climateFootprint,
+    this.servingsPerContainer,
+    this.servingSize,
+    this.calories,
+    this.nutrients,
+  });
+
+  factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
       title: json['title'] as String?,
       photo: json['photo'] as String?,
-      calories: json['calories'] as String?,
       time: json['time'] as String?,
       description: json['description'] as String?,
+      ingredients: json['ingredients'] != null
+          ? List<String>.from(json['ingredients'] as List<dynamic>)
+          : null,
+      tutorial: json['tutorial'] != null
+          ? TutorialStep.toList(List<Map<String, Object>>.from(json['tutorial'] as List))
+          : null,
+      climateFootprint: json['climateFootprint'] != null
+          ? ClimateFootprint.fromJson(json['climateFootprint'] as Map<String, dynamic>)
+          : null,
+      servingsPerContainer: json['servings_per_container'] as String?,
+      servingSize: json['serving_size'] as String?,
+      calories: json['calories'] as String?,
+      nutrients: json['nutrients'] != null
+          ? (json['nutrients'] as Map<String, dynamic>).map((key, value) {
+              return MapEntry(key, List<String>.from(value as List<dynamic>));
+            })
+          : null,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'photo': photo,
+      'time': time,
+      'description': description,
+      'ingredients': ingredients,
+      'tutorial': tutorial?.map((step) => step.toMap()).toList(),
+      'climateFootprint': climateFootprint?.toMap(),
+      'servings_per_container': servingsPerContainer,
+      'serving_size': servingSize,
+      'calories': calories,
+      'nutrients': nutrients,
+    };
+  }
 }
+
 
 class TutorialStep {
   String? step;
@@ -44,46 +93,57 @@ class TutorialStep {
   }
 }
 
-class Review {
-  String? username;
-  String? review;
-  Review({this.username, this.review});
 
-  factory Review.fromJson(Map<String, Object> json) => Review(
-        review: json['review'] as String?,
-        username: json['username'] as String?,
-      );
+class ClimateFootprint {
+  String? productName;
+  double? totalClimateImpact;
+  List<FundamentalActivity>? activities;
 
-  Map<String, Object?> toMap() {
-    return {
-      'username': username,
-      'review': review,
-    };
+  ClimateFootprint({this.productName, this.totalClimateImpact, this.activities});
+
+  factory ClimateFootprint.fromJson(Map<String, dynamic> json) {
+    return ClimateFootprint(
+      productName: json['productName'] as String?,
+      totalClimateImpact: (json['totalClimateImpact'] as num?)?.toDouble(),
+      activities: json['activities'] != null
+          ? FundamentalActivity.toList(List<Map<String, dynamic>>.from(json['activities'] as List))
+          : null,
+    );
   }
 
-  static List<Review> toList(List<Map<String, Object>> json) {
-    return List.from(json).map((e) => Review(username: e['username'], review: e['review'])).toList();
+  Map<String, dynamic> toMap() {
+    return {
+      'productName': productName,
+      'totalClimateImpact': totalClimateImpact,
+      'activities': activities?.map((activity) => activity.toMap()).toList(),
+    };
   }
 }
 
-class Ingridient {
+class FundamentalActivity {
   String? name;
-  String? size;
+  double? climateImpact;
+  double? shareOfTotal;
 
-  Ingridient({this.name, this.size});
-  factory Ingridient.fromJson(Map<String, Object> json) => Ingridient(
-        name: json['name'] as String?,
-        size: json['size'] as String?,
-      );
+  FundamentalActivity({this.name, this.climateImpact, this.shareOfTotal});
 
-  Map<String, Object?> toMap() {
+  factory FundamentalActivity.fromJson(Map<String, dynamic> json) {
+    return FundamentalActivity(
+      name: json['name'] as String?,
+      climateImpact: (json['climateImpact'] as num?)?.toDouble(),
+      shareOfTotal: (json['shareOfTotal'] as num?)?.toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'size': size,
+      'climateImpact': climateImpact,
+      'shareOfTotal': shareOfTotal,
     };
   }
 
-  static List<Ingridient> toList(List<Map<String, Object>> json) {
-    return List.from(json).map((e) => Ingridient(name: e['name'], size: e['size'])).toList();
+  static List<FundamentalActivity> toList(List<Map<String, dynamic>> jsonList) {
+    return jsonList.map((e) => FundamentalActivity.fromJson(e)).toList();
   }
 }

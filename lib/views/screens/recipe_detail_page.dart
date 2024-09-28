@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hungry/models/core/recipe.dart';
 import 'package:hungry/views/screens/full_screen_image.dart';
 import 'package:hungry/views/utils/AppColor.dart';
-import 'package:hungry/views/widgets/ingridient_tile.dart';
-import 'package:hungry/views/widgets/review_tile.dart';
-import 'package:hungry/views/widgets/step_tile.dart';
+import 'package:hungry/views/widgets/climate_footprint_tile.dart';
+import 'package:hungry/views/widgets/nutrients_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RecipeDetailPage extends StatefulWidget {
-  final Recipe data;
-  RecipeDetailPage({required this.data});
+  final String recipeId;
+
+  RecipeDetailPage({required this.recipeId});
 
   @override
   _RecipeDetailPageState createState() => _RecipeDetailPageState();
 }
 
-class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProviderStateMixin {
+class _RecipeDetailPageState extends State<RecipeDetailPage>
+    with TickerProviderStateMixin {
   TabController? _tabController;
   ScrollController? _scrollController;
+
+  Color appBarColor = Colors.transparent;
 
   @override
   void initState() {
@@ -30,16 +33,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
     });
   }
 
-  Color appBarColor = Colors.transparent;
-
-  changeAppBarColor(ScrollController scrollController) {
+  void changeAppBarColor(ScrollController scrollController) {
     if (scrollController.position.hasPixels) {
       if (scrollController.position.pixels > 2.0) {
         setState(() {
           appBarColor = AppColor.primary;
         });
-      }
-      if (scrollController.position.pixels <= 2.0) {
+      } else {
         setState(() {
           appBarColor = Colors.transparent;
         });
@@ -51,17 +51,56 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
     }
   }
 
-  // fab to write review
-  showFAB(TabController tabController) {
-    int reviewTabIndex = 2;
-    if (tabController.index == reviewTabIndex) {
-      return true;
+  Future<Recipe?> getRecipeById(String recipeId) async {
+    try {
+      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+          .collection('scans')
+          .doc(recipeId)
+          .get();
+
+      if (docSnapshot.exists) {
+        Map<String, dynamic> data =
+            docSnapshot.data() as Map<String, dynamic>;
+        Recipe recipe = Recipe.fromJson(data);
+        return recipe;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching recipe: $e');
+      return null;
     }
-    return false;
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<Recipe?>(
+      future: getRecipeById(widget.recipeId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Loading indicator
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          // Error message
+          return Scaffold(
+            body: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          // Recipe not found
+          return Scaffold(
+            body: Center(child: Text('Recipe not found.')),
+          );
+        } else {
+          Recipe recipe = snapshot.data!;
+          return buildRecipeDetail(context, recipe);
+        }
+      },
+    );
+  }
+
+  Widget buildRecipeDetail(BuildContext context, Recipe recipe) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -74,7 +113,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
             brightness: Brightness.dark,
             elevation: 0,
             centerTitle: true,
-            title: Text('Search Recipe', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w400, fontSize: 16)),
+            title: Text('Recipe Detail',
+                style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16)),
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios, color: Colors.white),
               onPressed: () {
@@ -82,67 +125,12 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
               },
             ),
             actions: [
-              IconButton(onPressed: () {}, icon: SvgPicture.asset('assets/icons/bookmark.svg', color: Colors.white)),
+              IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset('assets/icons/bookmark.svg',
+                      color: Colors.white)),
             ],
           ),
-        ),
-      ),
-      // Post Review FAB
-      floatingActionButton: Visibility(
-        visible: showFAB(_tabController!),
-        child: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 150,
-                      color: Colors.white,
-                      child: TextField(
-                        keyboardType: TextInputType.multiline,
-                        minLines: 6,
-                        decoration: InputDecoration(
-                          hintText: 'Write your review here...',
-                        ),
-                        maxLines: null,
-                      ),
-                    ),
-                    actions: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 120,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('cancel'),
-                              style: TextButton.styleFrom(
-                                primary: Colors.grey[600],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: Text('Post Review'),
-                                style: ElevatedButton.styleFrom(
-                                  primary: AppColor.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  );
-                });
-          },
-          child: Icon(Icons.edit),
-          backgroundColor: AppColor.primary,
         ),
       ),
       body: ListView(
@@ -151,15 +139,21 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
         padding: EdgeInsets.zero,
         physics: BouncingScrollPhysics(),
         children: [
-          // Section 1 - Recipe Image
+          // Recipe Image
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => FullScreenImage(image: Image.asset(widget.data.photo!, fit: BoxFit.cover))));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FullScreenImage(
+                      image: Image.network(recipe.photo ?? '',
+                          fit: BoxFit.cover))));
             },
             child: Container(
               height: 280,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(image: DecorationImage(image: AssetImage(widget.data.photo!), fit: BoxFit.cover)),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(recipe.photo ?? ''),
+                      fit: BoxFit.cover)),
               child: Container(
                 decoration: BoxDecoration(gradient: AppColor.linearBlackTop),
                 height: 280,
@@ -167,13 +161,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
               ),
             ),
           ),
-          // Section 2 - Recipe Info
+          // Recipe Info
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(top: 20, bottom: 30, left: 16, right: 16),
+            padding:
+                EdgeInsets.only(top: 20, bottom: 30, left: 16, right: 16),
             color: AppColor.primary,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Recipe Calories and Time
@@ -188,7 +182,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
                     Container(
                       margin: EdgeInsets.only(left: 5),
                       child: Text(
-                        widget.data.calories!,
+                        recipe.calories ?? '',
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ),
@@ -197,7 +191,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
                     Container(
                       margin: EdgeInsets.only(left: 5),
                       child: Text(
-                        widget.data.time!,
+                        recipe.time ?? '',
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ),
@@ -207,86 +201,66 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> with TickerProvider
                 Container(
                   margin: EdgeInsets.only(bottom: 12, top: 16),
                   child: Text(
-                    widget.data.title!,
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'inter'),
+                    recipe.title ?? '',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter'),
                   ),
                 ),
                 // Recipe Description
                 Text(
-                  widget.data.description!,
-                  style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14, height: 150 / 100),
+                  recipe.description ?? '',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 14,
+                      height: 1.5),
                 ),
               ],
             ),
           ),
-          // Tabbar ( Ingridients, Tutorial, Reviews )
+          // TabBar
           Container(
             height: 60,
             width: MediaQuery.of(context).size.width,
             color: AppColor.secondary,
             child: TabBar(
               controller: _tabController,
-              onTap: (index) {
-                setState(() {
-                  _tabController!.index = index;
-                });
-              },
               labelColor: Colors.black,
               unselectedLabelColor: Colors.black.withOpacity(0.6),
-              labelStyle: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w500),
+              labelStyle:
+                  TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w500),
               indicatorColor: Colors.black,
               tabs: [
-                Tab(
-                  text: 'Ingridients',
-                ),
-                Tab(
-                  text: 'Tutorial',
-                ),
-                Tab(
-                  text: 'Reviews',
-                ),
+                Tab(text: 'Ingredients'),
+                Tab(text: 'Health'),
+                Tab(text: 'Footprint'),
               ],
             ),
           ),
-          // IndexedStack based on TabBar index
-          IndexedStack(
-            index: _tabController!.index,
-            children: [
-              // Ingridients
-              ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                itemCount: widget.data.ingridients!.length,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return IngridientTile(
-                    data: widget.data.ingridients![index],
-                  );
-                },
-              ),
-              // Tutorials
-              ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                itemCount: widget.data.tutorial!.length,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return StepTile(
-                    data: widget.data.tutorial![index],
-                  );
-                },
-              ),
-              // Reviews
-              ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                itemCount: widget.data.reviews!.length,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return ReviewTile(data: widget.data.reviews![index]);
-                },
-              )
-            ],
+          // TabBarView
+          Container(
+            height: MediaQuery.of(context).size.height - 340, // Adjust height
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // Ingredients Tab
+                ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: recipe.ingredients?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(recipe.ingredients![index]),
+                    );
+                  },
+                ),
+                // Health Tab
+                NutrientsWidget(nutrients: recipe.nutrients),
+                // Footprint Tab
+                ClimateFootprintTile(data: recipe.climateFootprint),
+              ],
+            ),
           ),
         ],
       ),

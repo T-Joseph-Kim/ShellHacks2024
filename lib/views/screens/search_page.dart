@@ -13,7 +13,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController searchInputController = TextEditingController();
-  final List<Recipe> searchResult = RecipeHelper.sarchResultRecipe;
+  final List<Recipe> searchResult = RecipeHelper.searchResultRecipe;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
                             maxLines: 1,
                             textInputAction: TextInputAction.search,
                             decoration: InputDecoration(
-                              hintText: 'What do you want to eat?',
+                              hintText: 'Search your scans and products',
                               hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
                               prefixIconConstraints: BoxConstraints(maxHeight: 20),
                               contentPadding: EdgeInsets.symmetric(horizontal: 17),
@@ -123,19 +123,20 @@ class _SearchPageState extends State<SearchPage> {
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: popularRecipeKeyword.length,
+                    itemCount: 0,
                     separatorBuilder: (context, index) {
                       return SizedBox(width: 8);
                     },
                     itemBuilder: (context, index) {
                       return Container(
+
                         alignment: Alignment.topCenter,
                         child: TextButton(
                           onPressed: () {
-                            searchInputController.text = popularRecipeKeyword[index];
+                            searchInputController.text = "temp";
                           },
                           child: Text(
-                            popularRecipeKeyword[index],
+                            "temp",
                             style: TextStyle(color: Colors.white.withOpacity(0.7), fontWeight: FontWeight.w400),
                           ),
                           style: OutlinedButton.styleFrom(
