@@ -30,8 +30,16 @@ class _RegisterModalState extends State<RegisterModal> {
   List<String> _selectedAllergies = [];
 
   // Ethnicity and allergies options
-  final List<String> _ethnicityOptions = ['East Asian', 'South Asian', 'Southeast Asian', 'Pacific Islander', 'African', 'African American', 'Hispanic/Latino', 'Middle Eastern/North African', 'Native American/Indigenous', 'White/Caucasian', 'Other'];
-  final List<String> _allergyOptions = ['Peanuts', 'Tree Nuts', 'Shellfish', 'Dairy', 'Eggs', 'Fish', 'Soy', 'Corn', 'Sesame', 'Wheat/Gluten', 'None'];
+  final List<String> _ethnicityOptions = [
+    'East Asian', 'South Asian', 'Southeast Asian', 'Pacific Islander', 'African', 
+    'African American', 'Hispanic/Latino', 'Middle Eastern/North African', 
+    'Native American/Indigenous', 'White/Caucasian', 'Other'
+  ];
+  
+  final List<String> _allergyOptions = [
+    'Peanuts', 'Tree Nuts', 'Shellfish', 'Dairy', 'Eggs', 
+    'Fish', 'Soy', 'Corn', 'Sesame', 'Wheat/Gluten', 'None'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +55,19 @@ class _RegisterModalState extends State<RegisterModal> {
           ),
           child: Column(
             children: [
+              // White bar at the top similar to LoginModal
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 35 / 100,
+                  margin: EdgeInsets.only(bottom: 20),
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300], // The color of the bar
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
               Expanded(
                 child: CarouselSlider(
                   carouselController: _carouselController,
@@ -314,7 +335,6 @@ class _RegisterModalState extends State<RegisterModal> {
       ),
     );
   }
-
 
   // Show a dialog with the input summary
   void _showSummaryDialog() {

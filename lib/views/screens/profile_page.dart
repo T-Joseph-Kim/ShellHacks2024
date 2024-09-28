@@ -1,7 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hungry/views/utils/AppColor.dart';
-import 'package:hungry/views/widgets/user_info_tile.dart';
+
+class UserInfoTile extends StatelessWidget {
+  final String label, value;
+  final EdgeInsetsGeometry? margin, padding;
+  final Color? valueBackground;
+  UserInfoTile({required this.label, required this.value, this.padding, this.margin, this.valueBackground});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      padding: padding,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text('$label', style: TextStyle(color: AppColor.primary, fontSize: 12)),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 6),
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.all(16),
+            color: valueBackground ?? AppColor.primaryExtraSoft,
+            child: Text('$value', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'inter')),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class UserInfoChips extends StatelessWidget {
+  final String label;
+  final List<String> values;
+  final EdgeInsetsGeometry? margin, padding;
+  final Color? valueBackground;
+  UserInfoChips({required this.label, required this.values, this.padding, this.margin, this.valueBackground});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      padding: padding,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text('$label', style: TextStyle(color: AppColor.primary, fontSize: 12)),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 6),
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            color: valueBackground ?? AppColor.primaryExtraSoft,
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: values.map((value) {
+                return Chip(
+                  label: Text(value, style: TextStyle(fontSize: 14)),
+                  backgroundColor: AppColor.secondary,
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -13,12 +85,6 @@ class ProfilePage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text('My Profile', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w400, fontSize: 16)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         actions: [
           TextButton(
             onPressed: () {},
@@ -54,7 +120,7 @@ class ProfilePage extends StatelessWidget {
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(100),
                       // Profile Picture
-                      image: DecorationImage(image: AssetImage('assets/images/profile.jpg'), fit: BoxFit.cover),
+                      image: DecorationImage(image: AssetImage('assets/images/ProfilePicture.jpg'), fit: BoxFit.cover),
                     ),
                   ),
                   Row(
@@ -62,7 +128,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       Text('Change Profile Picture', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w600, color: Colors.white)),
                       SizedBox(width: 8),
-                      SvgPicture.asset('assets/icons/camera.svg', color: Colors.white),
+                      Icon(Icons.camera_alt, color: Colors.white), // Replaced the camera icon with a simple icon
                     ],
                   )
                 ],
@@ -89,14 +155,24 @@ class ProfilePage extends StatelessWidget {
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
-                  label: 'Subscription Type',
-                  value: 'Premium Subscription',
-                  valueBackground: AppColor.secondary,
+                  label: 'Height',
+                  value: '5\' 6"',
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
-                  label: 'Subscription Time',
-                  value: 'Until 22 Oct 2021',
+                  label: 'Weight',
+                  value: '140 lbs',
+                ),
+                UserInfoTile(
+                  margin: EdgeInsets.only(bottom: 16),
+                  label: 'Ethnicity',
+                  value: 'Asian',
+                ),
+                UserInfoChips(
+                  margin: EdgeInsets.only(bottom: 16),
+                  label: 'Allergies',
+                  values: ['Peanuts', 'Dairy', 'Gluten'],
+                  valueBackground: AppColor.primaryExtraSoft,
                 ),
               ],
             ),

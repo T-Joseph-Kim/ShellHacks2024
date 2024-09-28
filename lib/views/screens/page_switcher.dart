@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hungry/views/screens/bookmarks_page.dart';
 import 'package:hungry/views/screens/camera_page.dart'; // Import the new CameraPage
 import 'package:hungry/views/screens/home_page.dart';
+import 'package:hungry/views/screens/profile_page.dart';
 import 'package:hungry/views/utils/AppColor.dart';
 import 'package:hungry/views/widgets/custom_bottom_navigation_bar.dart';
 
@@ -54,7 +55,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
               [
                 HomePage(),
                 CameraPage(cameras: cameras), // Use the initialized cameras
-                BookmarksPage(),
+                ProfilePage(),
               ][_selectedIndex],
               BottomGradientWidget(),
             ],

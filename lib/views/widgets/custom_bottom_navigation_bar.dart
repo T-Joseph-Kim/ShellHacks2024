@@ -36,8 +36,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/camera-filled.svg', color: AppColor.primary, height: 28, width: 26), label: '')
                   : BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/camera.svg', color: Colors.grey[600], height: 28, width: 26), label: ''),
               (widget.selectedIndex == 2)
-                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/bookmark-filled.svg', color: AppColor.primary), label: '')
-                  : BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/bookmark.svg', color: Colors.grey[600]), label: ''),
+                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/profile-filled.svg', color: AppColor.primary), label: '')
+                  : BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/profile.svg', color: Colors.grey[600]), label: ''),
             ],
           ),
         ),

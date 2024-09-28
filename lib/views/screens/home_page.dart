@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
       appBar: CustomAppBar(
         title: Text('Hungry?', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w700)),
         showProfilePhoto: true,
-        profilePhoto: AssetImage('assets/images/pp.png'),
+        profilePhoto: AssetImage('assets/images/ProfilePicture.jpg'),
         profilePhotoOnPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
         },
