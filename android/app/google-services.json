@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "798843042347",
+    "project_id": "shellhacks2024-d621c",
+    "storage_bucket": "shellhacks2024-d621c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:798843042347:android:b2f0500f80367e4bb1486e",
+        "android_client_info": {
+          "package_name": "com.example.hungry"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmw9C7OlHtsc5S6XmhTdTYHAXZ78-3A-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
