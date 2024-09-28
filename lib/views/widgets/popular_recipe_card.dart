@@ -14,7 +14,7 @@ class PopularRecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecipeDetailPage(data: data)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecipeDetailPage(recipeId: "d")));
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

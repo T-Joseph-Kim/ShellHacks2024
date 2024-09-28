@@ -10,7 +10,7 @@ class RecommendationRecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecipeDetailPage(data: data)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecipeDetailPage(recipeId: "2")));
       },
       child: Container(
         width: 180,
