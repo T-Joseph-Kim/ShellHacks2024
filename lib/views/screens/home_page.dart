@@ -159,7 +159,7 @@ class HomePage extends StatelessWidget {
                 // Content
                 ListView.separated(
                   shrinkWrap: true,
-                  itemCount: 3 ?? newlyPostedRecipe.length,
+                  itemCount: newlyPostedRecipe.length,
                   physics: NeverScrollableScrollPhysics(),
                   separatorBuilder: (context, index) {
                     return SizedBox(height: 16);

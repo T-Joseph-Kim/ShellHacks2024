@@ -207,10 +207,6 @@ var newlyPostedRecipeRawData = [
       {'step': '4', 'description': 'Place the poached eggs on top of the avocado toast.'},
       {'step': '5', 'description': 'Season with salt and pepper, then serve.'},
     ],
-    'reviews': [
-      {'username': '@breakfastLover', 'review': 'A perfect start to my day!'},
-      {'username': '@foodie', 'review': 'Simple and tasty.'},
-    ],
   }, {
     'title': 'Vegetable Noodle Bowl',
     'photo': 'assets/images/featured1.jpg',
@@ -249,10 +245,6 @@ var newlyPostedRecipeRawData = [
       {'step': '4', 'description': 'Add soy sauce and garlic, then stir well.'},
       {'step': '5', 'description': 'Serve hot and enjoy!'},
     ],
-    'reviews': [
-      {'username': '@foodie123', 'review': 'Absolutely delicious and easy to make!'},
-      {'username': '@veggieLover', 'review': 'A perfect meal for vegetarians.'},
-    ],
   }, {
     'title': 'Vegetable Noodle Bowl',
     'photo': 'assets/images/featured1.jpg',
@@ -290,10 +282,6 @@ var newlyPostedRecipeRawData = [
       {'step': '3', 'description': 'Mix noodles and vegetables together.'},
       {'step': '4', 'description': 'Add soy sauce and garlic, then stir well.'},
       {'step': '5', 'description': 'Serve hot and enjoy!'},
-    ],
-    'reviews': [
-      {'username': '@foodie123', 'review': 'Absolutely delicious and easy to make!'},
-      {'username': '@veggieLover', 'review': 'A perfect meal for vegetarians.'},
     ],
   },
   // Add more recipes as needed...
