@@ -146,17 +146,17 @@ class ProfilePage extends StatelessWidget {
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Email',
-                  value: 'reinazahradummy@gmail.com',
+                  value: 'tjosephkim@gmail.com',
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Full Name',
-                  value: 'Reina Zahra Azizah',
+                  value: 'Taebok Joseph Kim',
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Height',
-                  value: '5\' 6"',
+                  value: '5\' 11"',
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
@@ -166,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Ethnicity',
-                  value: 'Asian',
+                  value: 'East Asian',
                 ),
                 UserInfoChips(
                   margin: EdgeInsets.only(bottom: 16),
