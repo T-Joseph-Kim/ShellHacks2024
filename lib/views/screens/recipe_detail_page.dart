@@ -4,8 +4,10 @@ import 'package:hungry/models/core/recipe.dart';
 import 'package:hungry/views/screens/full_screen_image.dart';
 import 'package:hungry/views/utils/AppColor.dart';
 import 'package:hungry/views/widgets/climate_footprint_tile.dart';
-import 'package:hungry/views/widgets/nutrients_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fl_chart/fl_chart.dart'; // For Bar Chart
+import 'package:lottie/lottie.dart';
+import '../../models/core/nutrient.dart'; // For Hand Animations
 
 class RecipeDetailPage extends StatefulWidget {
   final String recipeId;
@@ -18,8 +20,8 @@ class RecipeDetailPage extends StatefulWidget {
 
 class _RecipeDetailPageState extends State<RecipeDetailPage>
     with TickerProviderStateMixin {
-  TabController? _tabController;
-  ScrollController? _scrollController;
+  late TabController _tabController;
+  late ScrollController _scrollController;
 
   Color appBarColor = Colors.transparent;
 
@@ -28,26 +30,26 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _scrollController = ScrollController(initialScrollOffset: 0.0);
-    _scrollController!.addListener(() {
-      changeAppBarColor(_scrollController!);
+    _scrollController.addListener(() {
+      changeAppBarColor(_scrollController);
     });
   }
 
   void changeAppBarColor(ScrollController scrollController) {
-    if (scrollController.position.hasPixels) {
-      if (scrollController.position.pixels > 2.0) {
-        setState(() {
-          appBarColor = AppColor.primary;
-        });
+    if (scrollController.hasClients) {
+      if (scrollController.offset > 2.0) {
+        if (appBarColor != AppColor.primary) {
+          setState(() {
+            appBarColor = AppColor.primary;
+          });
+        }
       } else {
-        setState(() {
-          appBarColor = Colors.transparent;
-        });
+        if (appBarColor != Colors.transparent) {
+          setState(() {
+            appBarColor = Colors.transparent;
+          });
+        }
       }
-    } else {
-      setState(() {
-        appBarColor = Colors.transparent;
-      });
     }
   }
 
@@ -70,6 +72,29 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
       print('Error fetching recipe: $e');
       return null;
     }
+  }
+
+  // Assuming getNutrientDailyValues is a synchronous function
+  List<NutrientData> getNutrientDailyValues(Recipe recipe) {
+    // Implement your logic to extract nutrient data from the recipe
+    // Example:
+    return [
+      NutrientData(name: 'Total Fat', value: 65, dailyValue: 78),
+      NutrientData(name: 'Trans Fat', value: 10, dailyValue: 20),
+      NutrientData(name: 'Sat. Fat', value: 20, dailyValue: 40),
+      NutrientData(name: 'Sugar', value: 30, dailyValue: 50),
+      NutrientData(name: 'Sodium', value: 1200, dailyValue: 2400),
+      NutrientData(name: 'Cholesterol', value: 300, dailyValue: 300),
+      NutrientData(name: 'Protein', value: 50, dailyValue: 50),
+      // Add more nutrients as needed
+    ];
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -101,6 +126,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
   }
 
   Widget buildRecipeDetail(BuildContext context, Recipe recipe) {
+    // Get the list of nutrient data synchronously
+    List<NutrientData> nutrientData = getNutrientDailyValues(recipe);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -133,137 +161,394 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
           ),
         ),
       ),
-      body: ListView(
+      body: NestedScrollView(
         controller: _scrollController,
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        physics: BouncingScrollPhysics(),
-        children: [
-          // Recipe Image
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => FullScreenImage(
-                      image: Image.network(recipe.photo ?? '',
-                          fit: BoxFit.cover))));
-            },
-            child: Container(
-              height: 280,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(recipe.photo ?? ''),
-                      fit: BoxFit.cover)),
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverToBoxAdapter(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => FullScreenImage(
+                        image: Image.network(recipe.photo ?? '',
+                            fit: BoxFit.cover))));
+              },
               child: Container(
-                decoration: BoxDecoration(gradient: AppColor.linearBlackTop),
                 height: 280,
                 width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(recipe.photo ?? ''),
+                        fit: BoxFit.cover)),
+                child: Container(
+                  decoration: BoxDecoration(gradient: AppColor.linearBlackTop),
+                ),
               ),
             ),
           ),
-          // Recipe Info
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding:
-                EdgeInsets.only(top: 20, bottom: 30, left: 16, right: 16),
-            color: AppColor.primary,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Recipe Calories and Time
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/fire-filled.svg',
-                      color: Colors.white,
-                      width: 16,
-                      height: 16,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 5),
-                      child: Text(
-                        recipe.calories ?? '',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(Icons.alarm, size: 16, color: Colors.white),
-                    Container(
-                      margin: EdgeInsets.only(left: 5),
-                      child: Text(
-                        recipe.time ?? '',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-                // Recipe Title
-                Container(
-                  margin: EdgeInsets.only(bottom: 12, top: 16),
-                  child: Text(
-                    recipe.title ?? '',
-                    style: TextStyle(
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                height: 300, // Specify a fixed height
+                child: NutrientBarChart(data: nutrientData),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(
+                  top: 20, bottom: 30, left: 16, right: 16),
+              color: AppColor.primary,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Recipe Calories and Time
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/fire-filled.svg',
                         color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter'),
+                        width: 16,
+                        height: 16,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 5),
+                        child: Text(
+                          recipe.calories ?? '',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Icon(Icons.alarm, size: 16, color: Colors.white),
+                      Container(
+                        margin: EdgeInsets.only(left: 5),
+                        child: Text(
+                          recipe.time ?? '',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                // Recipe Description
-                Text(
-                  recipe.description ?? '',
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 14,
-                      height: 1.5),
-                ),
-              ],
+                  // Recipe Title
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12, top: 16),
+                    child: Text(
+                      recipe.title ?? '',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter'),
+                    ),
+                  ),
+                  // Recipe Description
+                  Text(
+                    recipe.description ?? '',
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 14,
+                        height: 1.5),
+                  ),
+                ],
+              ),
             ),
           ),
-          // TabBar
-          Container(
-            height: 60,
-            width: MediaQuery.of(context).size.width,
-            color: AppColor.secondary,
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black.withOpacity(0.6),
-              labelStyle:
-                  TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w500),
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(text: 'Ingredients'),
-                Tab(text: 'Health'),
-                Tab(text: 'Footprint'),
-              ],
+          SliverPersistentHeader(
+            delegate: _SliverAppBarDelegate(
+              TabBar(
+                controller: _tabController,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.black.withOpacity(0.6),
+                labelStyle: TextStyle(
+                    fontFamily: 'Inter', fontWeight: FontWeight.w500),
+                indicatorColor: Colors.black,
+                tabs: [
+                  Tab(text: 'Ingredients'),
+                  Tab(text: 'Health'),
+                  Tab(text: 'Footprint'),
+                ],
+              ),
             ),
-          ),
-          // TabBarView
-          Container(
-            height: MediaQuery.of(context).size.height - 340, // Adjust height
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Ingredients Tab
-                ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: recipe.ingredients?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(recipe.ingredients![index]),
-                    );
-                  },
-                ),
-                // Health Tab
-                NutrientsWidget(nutrients: recipe.nutrients),
-                // Footprint Tab
-                ClimateFootprintTile(data: recipe.climateFootprint),
-              ],
-            ),
+            pinned: true,
           ),
         ],
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            // Ingredients Tab
+            ListView.builder(
+              padding: EdgeInsets.all(16.0),
+              itemCount: recipe.ingredients?.length ?? 0,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Icon(Icons.check),
+                  title: Text(recipe.ingredients![index]),
+                );
+              },
+            ),
+            // Health Tab - Now without Bar Chart
+            SingleChildScrollView(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Health Information',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  // Add additional health-related widgets here
+                  Text(
+                    'Detailed health information can be displayed here.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  // Example: Nutrient descriptions, recommendations, etc.
+                ],
+              ),
+            ),
+            // Footprint Tab
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ClimateFootprintTile(data: recipe.climateFootprint),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+// Custom SliverPersistentHeaderDelegate for TabBar
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar _tabBar;
+
+  _SliverAppBarDelegate(this._tabBar);
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: AppColor.secondary,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
+  }
+}
+
+// NutrientBarChart Widget
+class NutrientBarChart extends StatefulWidget {
+  final List<NutrientData> data;
+
+  NutrientBarChart({required this.data});
+
+  @override
+  _NutrientBarChartState createState() => _NutrientBarChartState();
+}
+
+class _NutrientBarChartState extends State<NutrientBarChart>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+  bool _showHand = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize AnimationController for hand animation
+    _controller = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    );
+
+    // Define the animation movement
+    _animation = Tween<Offset>(
+      begin: Offset(0.0, 1.5), // Start off-screen at the bottom
+      end: Offset(0.0, 0.0), // Move to original position
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    ));
+
+    // Start the animation
+    _controller.forward();
+
+    // Optionally hide the hand after a delay
+    Future.delayed(Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() {
+          _showHand = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  // Function to assign colors to each bar
+  Color getBarColor(String nutrientName) {
+    switch (nutrientName) {
+      case 'Total Fat':
+        return Colors.orange;
+      case 'Trans Fat':
+        return Colors.red;
+      case 'Sat. Fat':
+        return Colors.deepOrange;
+      case 'Sugar':
+        return Colors.pink;
+      case 'Sodium':
+        return Colors.blue;
+      case 'Cholesterol':
+        return Colors.green;
+      case 'Savings':
+        return Colors.teal;
+      case 'Protein':
+        return Colors.purple;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Ensure there is data to display
+    if (widget.data.isEmpty) {
+      return Center(child: Text('No nutrient data available.'));
+    }
+
+    return Stack(
+      children: [
+        // Bar Chart
+        BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.spaceAround,
+            maxY: 120, // Adjust based on your data
+            barTouchData: BarTouchData(
+              enabled: true,
+              touchTooltipData: BarTouchTooltipData(
+                tooltipBgColor: Colors.grey,
+                getTooltipItem:
+                    (group, groupIndex, rod, rodIndex) {
+                  String nutrient =
+                      widget.data[group.x.toInt()].name;
+                  double value =
+                      widget.data[group.x.toInt()].value;
+                  return BarTooltipItem(
+                    '$nutrient\n${value.toStringAsFixed(1)}',
+                    TextStyle(color: Colors.white),
+                  );
+                },
+              ),
+            ),
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget:
+                      (double value, TitleMeta meta) {
+                    final labels =
+                        widget.data.map((e) => e.name).toList();
+                    final index = value.toInt();
+                    if (index < 0 || index >= labels.length)
+                      return Container();
+                    return SideTitleWidget(
+                      axisSide: meta.axisSide,
+                      space: 4,
+                      child: Text(
+                        labels[index],
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+            ),
+            gridData: FlGridData(show: false),
+            borderData: FlBorderData(show: false),
+            barGroups: widget.data.asMap().entries.map((entry) {
+              int index = entry.key;
+              NutrientData nutrient = entry.value;
+
+              // Calculate the percentage of the daily value
+              double percentage =
+                  (nutrient.value / nutrient.dailyValue) * 100;
+              percentage =
+                  percentage.clamp(0, 120); // Limit the value for display
+
+              return BarChartGroupData(
+                x: index,
+                barRods: [
+                  BarChartRodData(
+                    toY: percentage,
+                    width: 16,
+                    color: getBarColor(nutrient.name),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
+        // Hand Animation
+        if (_showHand)
+          SlideTransition(
+            position: _animation,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Lottie.asset(
+                'assets/animations/hand_animation.json', // Ensure you have this file
+                width: 100,
+                height: 100,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+// Example NutrientData model
+class NutrientData {
+  final String name;
+  final double value;
+  final double dailyValue;
+
+  NutrientData({
+    required this.name,
+    required this.value,
+    required this.dailyValue,
+  });
 }
