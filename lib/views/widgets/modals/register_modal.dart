@@ -52,7 +52,7 @@ class _RegisterModalState extends State<RegisterModal> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 85 / 100,
+          height: MediaQuery.of(context).size.height * 84 / 100,
           padding: EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 16),
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 7, 77, 50),
@@ -131,12 +131,12 @@ class _RegisterModalState extends State<RegisterModal> {
             'Join Us',
             style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 15),
           CustomTextField(title: 'Email', hint: 'e.g. foodlover@email.com', controller: _emailController),
           CustomTextField(title: 'Full Name', hint: 'Your Full Name', margin: EdgeInsets.only(top: 16), controller: _fullNameController),
           CustomTextField(title: 'Password', hint: '**********', obsecureText: true, margin: EdgeInsets.only(top: 16), controller: _passwordController),
           CustomTextField(title: 'Retype Password', hint: '**********', obsecureText: true, margin: EdgeInsets.only(top: 16), controller: _retypePasswordController),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -188,7 +188,7 @@ Widget _buildWeightHeightPage() {
           textAlign: TextAlign.center,
           style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 15),
         // Weight and Age Input Row
         Row(
           children: [
@@ -303,7 +303,7 @@ Widget _buildEthnicityAllergyPage() {
           textAlign: TextAlign.center, // Center-align the title
           style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 15),
         // Styled DropdownButtonFormField for ethnicity
         Text(
           '  Ethnicity',
