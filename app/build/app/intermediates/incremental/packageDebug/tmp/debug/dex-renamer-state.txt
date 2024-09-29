@@ -1,0 +1,4 @@
+#Sat Sep 28 12:16:29 EDT 2024
+base.0=/Users/juntianzhong/ShellHacks2024/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
