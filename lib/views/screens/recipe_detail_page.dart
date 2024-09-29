@@ -270,7 +270,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
                 children: [
                   // Ingredients Tab
                   Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(3.0),
                       child:
                           IngredientsWidget(ingredients: recipe.ingredients ?? [])),
                   // Health Tab
