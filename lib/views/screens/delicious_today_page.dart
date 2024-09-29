@@ -6,7 +6,7 @@ import 'package:hungry/views/widgets/popular_recipe_card.dart';
 import 'package:hungry/views/widgets/recipe_tile.dart';
 
 class DeliciousTodayPage extends StatelessWidget {
-  final Recipe popularRecipe = RecipeHelper.popularRecipe;
+  final Recipe popularRecipe = RecipeHelper.popularRecipe!;
   final List<Recipe> featuredRecipe = RecipeHelper.featuredRecipe;
 
   @override
