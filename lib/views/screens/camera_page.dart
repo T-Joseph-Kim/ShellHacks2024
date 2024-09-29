@@ -1,9 +1,11 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:hungry/views/screens/more_details.dart';
+import 'package:hungry/views/screens/recipe_detail_page.dart';
+import 'dart:convert';
 import 'preview_page.dart'; // Import the PreviewPage
 
 class CameraPage extends StatefulWidget {
@@ -19,6 +21,13 @@ class _CameraPageState extends State<CameraPage> {
   late Future<void> cameraValue;
   bool isFlashOn = false;
   bool isRearCamera = true;
+
+  // Image files to hold the three pictures
+  File? nutritionImage;
+  File? ingredientsImage;
+  File? productImage;
+
+  int pictureStep = 0; // To track which picture is being taken
 
   void startCamera(int camera) {
     cameraController = CameraController(
@@ -41,9 +50,8 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
-  void takePicture() async {
-    if (cameraController.value.isTakingPicture ||
-        !cameraController.value.isInitialized) {
+  Future<void> takePicture() async {
+    if (cameraController.value.isTakingPicture || !cameraController.value.isInitialized) {
       return;
     }
 
@@ -60,18 +68,70 @@ class _CameraPageState extends State<CameraPage> {
         await cameraController.setFlashMode(FlashMode.off);
       }
 
-      // Navigate to PreviewPage and pass the image
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PreviewPage(
-            image: File(image.path),
-          ),
-        ),
-      );
+      // Store the image in the corresponding variable based on step
+      if (pictureStep == 0) {
+        nutritionImage = File(image.path);
+        setState(() {
+          pictureStep = 1; // Move to ingredients capture
+        });
+        _showMessage('Take a picture of the ingredients');
+      } else if (pictureStep == 1) {
+        ingredientsImage = File(image.path);
+        setState(() {
+          pictureStep = 2; // Move to front product capture
+        });
+        _showMessage('Take a picture of the front of the product');
+      } else if (pictureStep == 2) {
+        productImage = File(image.path);
+        await sendImagesToApi();
+      }
     } catch (e) {
       print('Error capturing image: $e');
     }
+  }
+
+  // Function to send the images to your API
+  Future<void> sendImagesToApi() async {
+    if (nutritionImage != null && ingredientsImage != null && productImage != null) {
+      try {
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse('http://localhost:8080/perform_nutrition_ingredient_and_product_OCR'),
+        );
+        request.files.add(await http.MultipartFile.fromPath('nutrition_file', nutritionImage!.path));
+        request.files.add(await http.MultipartFile.fromPath('ingredient_file', ingredientsImage!.path));
+        request.files.add(await http.MultipartFile.fromPath('product_file', productImage!.path));
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          var responseData = await response.stream.bytesToString();
+          var decodedData = json.decode(responseData);
+
+          // Navigate to the recipes page with the response data
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MoreDetailsPage(apiResponse: decodedData), // Assuming RecipesPage takes 'data' as argument
+            ),
+          );
+        } else {
+          _showMessage('Failed to upload images. Please try again.');
+        }
+      } catch (e) {
+        print('Error sending images to API: $e');
+        _showMessage('Error connecting to server.');
+      }
+    } else {
+      _showMessage('Please capture all three images.');
+    }
+  }
+
+  // Show a message to the user
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -98,7 +158,6 @@ class _CameraPageState extends State<CameraPage> {
               }
             },
           ),
-          // Flash and camera switch buttons
           SafeArea(
             child: Align(
               alignment: Alignment.topRight,
