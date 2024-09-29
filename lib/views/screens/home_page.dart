@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/models/core/recipe.dart';
 import 'package:hungry/models/helper/recipe_helper.dart';
-import 'package:hungry/views/screens/delicious_today_page.dart';
 import 'package:hungry/views/screens/newly_posted_page.dart';
 import 'package:hungry/views/screens/profile_page.dart';
 import 'package:hungry/views/screens/search_page.dart';

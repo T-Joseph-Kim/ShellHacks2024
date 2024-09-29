@@ -519,7 +519,7 @@ class _RegisterModalState extends State<RegisterModal> {
       await prefs.setString('email', _emailController.text);
       await prefs.setString('name', _fullNameController.text);
       await prefs.setString('password', _passwordController.text);
-      await prefs.setString('age', _ageController.text);
+      await prefs.setInt('age', int.parse(_ageController.text));
       await prefs.setString('weight', _weightController.text);
       await prefs.setString('heightFeet', _heightFeetController.text);
       await prefs.setString('heightInches', _heightInchesController.text);
