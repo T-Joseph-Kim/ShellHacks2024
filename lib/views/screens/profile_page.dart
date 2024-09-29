@@ -84,13 +84,13 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: AppColor.primary2,
         elevation: 0,
         centerTitle: true,
-        title: Text('My Profile', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w400, fontSize: 16)),
+        title: Text('My Profile', style: TextStyle(color: AppColor.secondary, fontFamily: 'inter', fontWeight: FontWeight.bold, fontSize: 16)),
         actions: [
           TextButton(
             onPressed: () {},
             child: Text(
               'Edit',
-              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+              style: TextStyle(color: AppColor.secondary, fontSize: 14, fontWeight: FontWeight.w600),
             ),
             style: TextButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
           ),
@@ -126,7 +126,7 @@ class ProfilePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Change Profile Picture', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w600, color: Colors.white)),
+                      Text('Change Profile Picture', style: TextStyle(color: AppColor.secondary, fontFamily: 'inter', fontWeight: FontWeight.w600)),
                       SizedBox(width: 8),
                       Icon(Icons.camera_alt, color: Colors.white), // Replaced the camera icon with a simple icon
                     ],
@@ -152,6 +152,16 @@ class ProfilePage extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Full Name',
                   value: 'Taebok Joseph Kim',
+                ),
+                UserInfoTile(
+                  margin: EdgeInsets.only(bottom: 16),
+                  label: 'Age',
+                  value: '20',
+                ),
+                UserInfoTile(
+                  margin: EdgeInsets.only(bottom: 16),
+                  label: 'Sex',
+                  value: 'Male',
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),

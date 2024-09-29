@@ -46,7 +46,7 @@ class CustomTextField extends StatelessWidget {
               obscureText: obsecureText,
               decoration: InputDecoration(
                 hintText: '$hint',
-                hintStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50)),
+                hintStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
                 contentPadding: EdgeInsets.only(left: 16),
                 border: InputBorder.none,
               ),

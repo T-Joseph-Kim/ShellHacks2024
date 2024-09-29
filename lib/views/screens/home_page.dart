@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('BetterBites', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w700)),
+        title: Text('BetterBites', style: TextStyle(color: AppColor.secondary, fontFamily: 'inter', fontWeight: FontWeight.w700)),
         showProfilePhoto: true,
         profilePhoto: AssetImage('assets/images/ProfilePicture.jpg'),
         profilePhotoOnPressed: () {

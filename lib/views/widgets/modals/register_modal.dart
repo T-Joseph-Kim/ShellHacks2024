@@ -23,11 +23,16 @@ class _RegisterModalState extends State<RegisterModal> {
   // Controllers for carousel fields
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _heightFeetController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _heightInchesController = TextEditingController();
 
   // Selected values for dropdowns
   String? _selectedEthnicity;
+  String? _selectedSex; // Dropdown value for sex
   List<String> _selectedAllergies = [];
+
+  // Sex options
+  final List<String> _sexOptions = ['Male', 'Female'];
 
   // Ethnicity and allergies options
   final List<String> _ethnicityOptions = [
@@ -170,24 +175,42 @@ class _RegisterModalState extends State<RegisterModal> {
     );
   }
 
-  // Weight and Height Input Page
+  // Weight and Height Input Page with Sex Dropdown
   Widget _buildWeightHeightPage() {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Enter your Body Weight and Height',
+            'Tell Us About Yourself',
+            textAlign: TextAlign.center,
             style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
           ),
           SizedBox(height: 20),
-          CustomTextField(
-            title: 'Weight (lbs)',
-            hint: 'e.g. 150',
-            controller: _weightController,
+          // Weight and Age Input Row
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  title: 'Weight (lbs)',
+                  hint: 'e.g. 150',
+                  controller: _weightController,
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: CustomTextField(
+                  title: 'Age',
+                  hint: 'e.g. 42',
+                  controller: _ageController,
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 20),
+          // Height Input Row
           Row(
             children: [
               Expanded(
@@ -207,10 +230,60 @@ class _RegisterModalState extends State<RegisterModal> {
               ),
             ],
           ),
+          SizedBox(height: 20),
+          // Sex Dropdown Row
+          Text(
+            '  Sex',
+            style: TextStyle(color: AppColor.secondary, fontSize: 14, fontFamily: 'inter')
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  value: _selectedSex,
+                  items: _sexOptions.map((sex) {
+                    return DropdownMenuItem(
+                      value: sex,
+                      child: Text(
+                        sex,
+                        style: TextStyle(
+                          color: AppColor.primary,
+                          fontFamily: 'inter',
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    labelText: 'e.g. Female',
+                    labelStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AppColor.primary),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AppColor.primary, width: 2),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedSex = value;
+                    });
+                  },
+                  icon: Icon(Icons.arrow_drop_down, color: AppColor.primary),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+
 
   // Ethnicity and Allergies Selection Page
   Widget _buildEthnicityAllergyPage() {
@@ -221,17 +294,17 @@ class _RegisterModalState extends State<RegisterModal> {
         crossAxisAlignment: CrossAxisAlignment.stretch, // Make content stretch horizontally
         children: [
           Text(
-            'Select your Ethnicity and Allergies',
+            'Tell Us About Yourself',
             textAlign: TextAlign.center, // Center-align the title
-            style: TextStyle(
-              color: AppColor.secondary,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'inter',
-            ),
+            style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter')
           ),
           SizedBox(height: 20),
           // Styled DropdownButtonFormField for ethnicity
+          Text(
+            '  Ethnicity',
+            style: TextStyle(color: AppColor.secondary, fontSize: 14, fontFamily: 'inter')
+          ),
+          SizedBox(height: 10),
           DropdownButtonFormField<String>(
             value: _selectedEthnicity,
             items: _ethnicityOptions.map((ethnicity) {
@@ -247,12 +320,8 @@ class _RegisterModalState extends State<RegisterModal> {
               );
             }).toList(),
             decoration: InputDecoration(
-              labelText: 'Ethnicity',
-              labelStyle: TextStyle(
-                color: AppColor.primary, // Label color
-                fontFamily: 'inter',
-                fontWeight: FontWeight.bold
-              ),
+              labelText: 'e.g. Asian',
+              labelStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
               filled: true,
               fillColor: Colors.white, // Background color of the dropdown
               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
@@ -274,6 +343,11 @@ class _RegisterModalState extends State<RegisterModal> {
           ),
           SizedBox(height: 20),
           // Styled Wrap for allergies
+          Text(
+            '  Do You Have Food Allergies?',
+            style: TextStyle(color: AppColor.secondary, fontSize: 15, fontFamily: 'inter')
+          ),
+          SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 4, // Adjust vertical spacing between chips
@@ -351,6 +425,7 @@ class _RegisterModalState extends State<RegisterModal> {
               Text('Name: ${_fullNameController.text}'),
               Text('Weight: ${_weightController.text} lbs'),
               Text('Height: ${_heightFeetController.text}\' ${_heightInchesController.text}"'),
+              Text('Sex: ${_selectedSex ?? 'Not selected'}'),
               Text('Ethnicity: ${_selectedEthnicity ?? 'Not selected'}'),
               Text('Allergies: ${_selectedAllergies.isNotEmpty ? _selectedAllergies.join(', ') : 'None'}'),
             ],
