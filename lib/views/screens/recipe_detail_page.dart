@@ -7,7 +7,8 @@ import 'package:hungry/views/widgets/climate_footprint_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart'; // For Bar Chart
 import 'package:lottie/lottie.dart';
-import '../../models/core/nutrient.dart'; // For Hand Animations
+import '../../models/core/nutrient.dart';
+import '../widgets/nutrients_widget.dart'; // For Hand Animations
 
 class RecipeDetailPage extends StatefulWidget {
   final String recipeId;
@@ -166,12 +167,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverToBoxAdapter(
             child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => FullScreenImage(
-                        image: Image.network(recipe.photo ?? '',
-                            fit: BoxFit.cover))));
-              },
               child: Container(
                 height: 280,
                 width: MediaQuery.of(context).size.width,
@@ -290,27 +285,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
               },
             ),
             // Health Tab - Now without Bar Chart
-            SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Health Information',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  // Add additional health-related widgets here
-                  Text(
-                    'Detailed health information can be displayed here.',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  // Example: Nutrient descriptions, recommendations, etc.
-                ],
-              ),
-            ),
+            Padding(
+            padding: const EdgeInsets.all(5.0), 
+            child: NutrientsWidget(nutrients: recipe.nutrients),
             // Footprint Tab
+              ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ClimateFootprintTile(data: recipe.climateFootprint),

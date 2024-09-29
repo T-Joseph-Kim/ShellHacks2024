@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
                   sigmaY: 3.0, // Adjust the blur intensity vertically
                 ),
                 child: Image.asset(
-                  'assets/images/WelcomeBackground.png',
+                  'assets/images/PackagedFoods2.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -53,7 +53,7 @@ class WelcomePage extends StatelessWidget {
                         Text(
                           "Nutrition Made Personal",
                           style: TextStyle(
-                            color: AppColor.secondary,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
                             fontFamily: 'Times',
@@ -81,7 +81,7 @@ class WelcomePage extends StatelessWidget {
                             child: Text(
                               "Don't have an account? Join Us",
                               style: TextStyle(
-                                color: AppColor.secondary,
+                                color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'inter',
@@ -120,7 +120,7 @@ class WelcomePage extends StatelessWidget {
                             child: Text(
                               'Log in',
                               style: TextStyle(
-                                color: AppColor.secondary,
+                                color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'inter',
@@ -147,7 +147,7 @@ class WelcomePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               side: BorderSide(
-                                color: AppColor.secondary,
+                                color: Colors.white,
                                 width: 1,
                               ),
                               primary: Colors.white,
