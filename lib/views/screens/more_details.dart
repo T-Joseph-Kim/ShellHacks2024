@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:hungry/views/utils/AppColor.dart';
 
 class MoreDetailsPage extends StatefulWidget {
   final Map<String, dynamic> apiResponse;
@@ -22,38 +21,7 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
   }
 
   Future<void> _getStructuredNutritionFacts() async {
-    var nutritionData = widget.apiResponse['nutrition_data'];
-    var text = nutritionData[0]["text"] ?? "";
-
-    // Set up the request body for the POST request
-    var requestBody = json.encode({
-      'text': text,
-      'bmi': '22.5', // Replace with actual data or let user input
-      'age': '30', // Replace with actual data or let user input
-      'users_health_concerns': 'diabetes', // Replace with actual data
-      'users_ailments': 'none' // Replace with actual data
-    });
-
-    try {
-      // Make POST request to Flask API
-      var response = await http.post(
-        Uri.parse('http://localhost:8080/get_structured_nutrition_facts'),
-        headers: {"Content-Type": "application/json"},
-        body: requestBody,
-      );
-
-      if (response.statusCode == 200) {
-        // Parse the response JSON
-        var responseData = json.decode(response.body);
-        setState(() {
-          structuredNutritionData = responseData['result'];
-        });
-      } else {
-        print('Failed to get structured nutrition data.');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
+    // API call logic here...
   }
 
   @override
@@ -62,35 +30,25 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
     var ingredientData = widget.apiResponse['ingredient_data']['ingredients'];
     var productRecognition = widget.apiResponse['product_recognition'];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('More Details'),
-        backgroundColor: Colors.teal,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('More Details'),
+          backgroundColor: AppColor.primary, // Use primary color from AppColor
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Nutrition'),
+              Tab(text: 'Ingredients'),
+              Tab(text: 'Product Recognition'),
+            ],
+            indicatorColor: AppColor.secondary, // Use secondary color for tab indicator
+          ),
+        ),
+        body: TabBarView(
           children: [
-            Text(
-              'Nutrition Data',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
             _buildNutritionSection(),
-            Divider(),
-            Text(
-              'Ingredients',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
             _buildIngredientSection(ingredientData),
-            Divider(),
-            Text(
-              'Product Recognition',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
             _buildProductRecognitionSection(productRecognition),
           ],
         ),
@@ -99,68 +57,72 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
   }
 
   Widget _buildNutritionSection() {
-    // If structured nutrition data is not yet available, show loading indicator
     if (structuredNutritionData == null) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(color: AppColor.primary)); // Use AppColor for loading indicator
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Recommendation: ${structuredNutritionData!["recommendation"]}'),
-        Text('Servings per Container: ${structuredNutritionData!["servings_per_container"]}'),
-        Text('Serving Size: ${structuredNutritionData!["serving_size"]}'),
-        Text('Calories: ${structuredNutritionData!["calories"]}'),
-        SizedBox(height: 10),
-        Text(
-          'Nutrients:',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: structuredNutritionData!["nutrients"].map<Widget>((nutrient) {
-            return Text(
-              '${nutrient["name"]}: ${nutrient["amount"]} (${nutrient["daily_value"]}%)',
-            );
-          }).toList(),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Recommendation: ${structuredNutritionData!["recommendation"]}',
+              style: TextStyle(color: AppColor.primary2)), // Apply color to text
+          Text('Servings per Container: ${structuredNutritionData!["servings_per_container"]}',
+              style: TextStyle(color: AppColor.secondary)), // Apply secondary color to text
+          Text('Serving Size: ${structuredNutritionData!["serving_size"]}'),
+          Text('Calories: ${structuredNutritionData!["calories"]}'),
+          SizedBox(height: 10),
+          Text(
+            'Nutrients:',
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primarySoft), // Use color for the title
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: structuredNutritionData!["nutrients"].map<Widget>((nutrient) {
+              return Text(
+                '${nutrient["name"]}: ${nutrient["amount"]} (${nutrient["daily_value"]}%)',
+              );
+            }).toList(),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildIngredientSection(List<dynamic> ingredientData) {
-    if (ingredientData == null || ingredientData.isEmpty) {
-      return Text('No ingredients found.');
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: ingredientData.map<Widget>((ingredient) {
-        return Text('• $ingredient');
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: ingredientData.map<Widget>((ingredient) {
+          return Text('• $ingredient', style: TextStyle(color: AppColor.primary2)); // Use primary2 for ingredient list
+        }).toList(),
+      ),
     );
   }
 
   Widget _buildProductRecognitionSection(Map<String, dynamic> productRecognition) {
-    if (productRecognition == null) {
-      return Text('No product recognition data.');
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Web Entities:'),
-        ...productRecognition['web_entities'].map<Widget>((entity) {
-          return Text('• ${entity["description"]} (Score: ${entity["score"]})');
-        }).toList(),
-        SizedBox(height: 10),
-        Text('Visually Similar Images:'),
-        ...productRecognition['visually_similar_images'].map<Widget>((imageUrl) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Image.network(imageUrl),
-          );
-        }).toList(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Web Entities:', style: TextStyle(color: AppColor.primary)),
+          ...productRecognition['web_entities'].map<Widget>((entity) {
+            return Text('• ${entity["description"]} (Score: ${entity["score"]})',
+                style: TextStyle(color: AppColor.primarySoft));
+          }).toList(),
+          SizedBox(height: 10),
+          Text('Visually Similar Images:', style: TextStyle(color: AppColor.primary2)),
+          ...productRecognition['visually_similar_images'].map<Widget>((imageUrl) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Image.network(imageUrl),
+            );
+          }).toList(),
+        ],
+      ),
     );
   }
 }

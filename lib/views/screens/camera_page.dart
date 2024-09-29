@@ -93,10 +93,11 @@ class _CameraPageState extends State<CameraPage> {
   // Function to send the images to your API
   Future<void> sendImagesToApi() async {
     if (nutritionImage != null && ingredientsImage != null && productImage != null) {
+      print('Sending images to API...');
       try {
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse('http://localhost:8080/perform_nutrition_ingredient_and_product_OCR'),
+          Uri.parse('http://10.108.246.91:5000/perform_nutrition_ingredient_and_product_OCR'),
         );
         request.files.add(await http.MultipartFile.fromPath('nutrition_file', nutritionImage!.path));
         request.files.add(await http.MultipartFile.fromPath('ingredient_file', ingredientsImage!.path));
@@ -107,6 +108,7 @@ class _CameraPageState extends State<CameraPage> {
         if (response.statusCode == 200) {
           var responseData = await response.stream.bytesToString();
           var decodedData = json.decode(responseData);
+          print(decodedData);
 
           // Navigate to the recipes page with the response data
           Navigator.pushReplacement(
