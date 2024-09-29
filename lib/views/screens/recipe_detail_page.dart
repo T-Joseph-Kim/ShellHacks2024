@@ -444,8 +444,7 @@ class _NutrientBarChartState extends State<NutrientBarChart>
                           barTouchResponse == null ||
                           barTouchResponse.spot == null) {
                         setState(() {
-                          _touchedIndex = null;
-                          _touchedNutrient = null;
+                          
                         });
                         return;
                       }
