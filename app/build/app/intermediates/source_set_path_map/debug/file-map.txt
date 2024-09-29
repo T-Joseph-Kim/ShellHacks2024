@@ -1,0 +1,17 @@
+com.example.hungry.app-jetified-annotation-experimental-1.1.0-0 /Users/juntianzhong/.gradle/caches/transforms-3/102e4caf25d286908f77f46a053b53ea/transformed/jetified-annotation-experimental-1.1.0/res
+com.example.hungry.app-jetified-window-1.0.0-beta04-1 /Users/juntianzhong/.gradle/caches/transforms-3/32337d601679af00bc66f19b6859f7fd/transformed/jetified-window-1.0.0-beta04/res
+com.example.hungry.app-jetified-firebase-common-20.4.2-2 /Users/juntianzhong/.gradle/caches/transforms-3/7a0ae3d3940fa279d5d1d56a00dbc1f4/transformed/jetified-firebase-common-20.4.2/res
+com.example.hungry.app-jetified-window-java-1.0.0-beta04-3 /Users/juntianzhong/.gradle/caches/transforms-3/8240d88da0b2e8672d5c0896194e7c0d/transformed/jetified-window-java-1.0.0-beta04/res
+com.example.hungry.app-core-1.6.0-4 /Users/juntianzhong/.gradle/caches/transforms-3/ed3df68924b544b545bc6496625dade3/transformed/core-1.6.0/res
+com.example.hungry.app-jetified-play-services-basement-18.1.0-5 /Users/juntianzhong/.gradle/caches/transforms-3/ff8c9a3169268c95341cf3e6223f6f15/transformed/jetified-play-services-basement-18.1.0/res
+com.example.hungry.app-debug-6 /Users/juntianzhong/ShellHacks2024/android/app/src/debug/res
+com.example.hungry.app-main-7 /Users/juntianzhong/ShellHacks2024/android/app/src/main/res
+com.example.hungry.app-google-services-8 /Users/juntianzhong/ShellHacks2024/build/app/generated/res/google-services/debug
+com.example.hungry.app-pngs-9 /Users/juntianzhong/ShellHacks2024/build/app/generated/res/pngs/debug
+com.example.hungry.app-resValues-10 /Users/juntianzhong/ShellHacks2024/build/app/generated/res/resValues/debug
+com.example.hungry.app-rs-11 /Users/juntianzhong/ShellHacks2024/build/app/generated/res/rs/debug
+com.example.hungry.app-mergeDebugResources-12 /Users/juntianzhong/ShellHacks2024/build/app/intermediates/incremental/debug/mergeDebugResources/merged.dir
+com.example.hungry.app-mergeDebugResources-13 /Users/juntianzhong/ShellHacks2024/build/app/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+com.example.hungry.app-merged_res-14 /Users/juntianzhong/ShellHacks2024/build/app/intermediates/merged_res/debug
+com.example.hungry.app-packaged_res-15 /Users/juntianzhong/ShellHacks2024/build/firebase_core/intermediates/packaged_res/debug
+com.example.hungry.app-packaged_res-16 /Users/juntianzhong/ShellHacks2024/build/flutter_native_splash/intermediates/packaged_res/debug

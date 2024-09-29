@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/views/utils/AppColor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfoTile extends StatelessWidget {
   final String label, value;
@@ -75,7 +76,44 @@ class UserInfoChips extends StatelessWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String _email = '';
+  String _fullName = '';
+  String _age = '';
+  String _sex = '';
+  String _height = '';
+  String _weight = '';
+  String _ethnicity = '';
+  List<String> _allergies = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // Load user data from SharedPreferences
+  Future<void> _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _email = prefs.getString('email') ?? '';
+      _fullName = prefs.getString('name') ?? '';
+      _age = prefs.getString('age') ?? '';
+      _sex = prefs.getString('sex') ?? '';
+      String heightFeet = prefs.getString('heightFeet') ?? '0';
+      String heightInches = prefs.getString('heightInches') ?? '0';
+      _height = '${heightFeet}\' ${heightInches}"';
+      _weight = prefs.getString('weight') ?? '';
+      _ethnicity = prefs.getString('ethnicity') ?? '';
+      _allergies = prefs.getStringList('allergies') ?? [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,15 +122,32 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: AppColor.primary2,
         elevation: 0,
         centerTitle: true,
-        title: Text('My Profile', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w400, fontSize: 16)),
+        title: Text(
+          'My Profile',
+          style: TextStyle(
+            color: AppColor.secondary,
+            fontFamily: 'inter',
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () {},
             child: Text(
               'Edit',
-              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: AppColor.secondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            style: TextButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
           ),
         ],
       ),
@@ -120,17 +175,27 @@ class ProfilePage extends StatelessWidget {
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(100),
                       // Profile Picture
-                      image: DecorationImage(image: AssetImage('assets/images/ProfilePicture.jpg'), fit: BoxFit.cover),
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/ProfilePicture.jpg'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Change Profile Picture', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w600, color: Colors.white)),
+                      Text(
+                        'Change Profile Picture',
+                        style: TextStyle(
+                          color: AppColor.secondary,
+                          fontFamily: 'inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       SizedBox(width: 8),
-                      Icon(Icons.camera_alt, color: Colors.white), // Replaced the camera icon with a simple icon
+                      Icon(Icons.camera_alt, color: Colors.white),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -146,37 +211,47 @@ class ProfilePage extends StatelessWidget {
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Email',
-                  value: 'tjosephkim@gmail.com',
+                  value: _email,
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Full Name',
-                  value: 'Taebok Joseph Kim',
+                  value: _fullName,
+                ),
+                UserInfoTile(
+                  margin: EdgeInsets.only(bottom: 16),
+                  label: 'Age',
+                  value: _age,
+                ),
+                UserInfoTile(
+                  margin: EdgeInsets.only(bottom: 16),
+                  label: 'Sex',
+                  value: _sex,
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Height',
-                  value: '5\' 11"',
+                  value: _height,
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Weight',
-                  value: '140 lbs',
+                  value: '$_weight lbs',
                 ),
                 UserInfoTile(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Ethnicity',
-                  value: 'East Asian',
+                  value: _ethnicity,
                 ),
                 UserInfoChips(
                   margin: EdgeInsets.only(bottom: 16),
                   label: 'Allergies',
-                  values: ['Peanuts', 'Dairy', 'Gluten'],
+                  values: _allergies,
                   valueBackground: AppColor.primaryExtraSoft,
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
