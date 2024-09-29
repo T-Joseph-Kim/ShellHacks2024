@@ -7,23 +7,29 @@ import 'package:hungry/views/screens/search_page.dart';
 import 'package:hungry/views/utils/AppColor.dart';
 import 'package:hungry/views/widgets/custom_app_bar.dart';
 import 'package:hungry/views/widgets/dummy_search_bar.dart';
-import 'package:hungry/views/widgets/featured_recipe_card.dart';
 import 'package:hungry/views/widgets/recipe_tile.dart';
-import 'package:hungry/views/widgets/recommendation_recipe_card.dart';
 
 class HomePage extends StatelessWidget {
-  final List<Recipe> featuredRecipe = RecipeHelper.featuredRecipe;
-  final List<Recipe> recommendationRecipe = RecipeHelper.recommendationRecipe;
   final List<Recipe> newlyPostedRecipe = RecipeHelper.newlyPostedRecipe;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('BetterBites', style: TextStyle(color: AppColor.secondary, fontFamily: 'inter', fontWeight: FontWeight.w700)),
+        title: Text(
+          'BetterBites',
+          style: TextStyle(
+            color: AppColor.secondary,
+            fontFamily: 'inter',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         showProfilePhoto: true,
         profilePhoto: AssetImage('assets/images/ProfilePicture.jpg'),
         profilePhotoOnPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
         },
       ),
       body: ListView(
@@ -32,83 +38,57 @@ class HomePage extends StatelessWidget {
         children: [
           // Section 1 - Featured Recipe - Wrapper
           Container(
-            height: 350,
             color: Colors.white,
-            child: Stack(
-              children: [
-                Container(
-                  height: 245,
-                  color: Color.fromARGB(255, 7, 77, 50),
-                ),
-                // Section 1 - Content
-                Column(
-                  children: [
-                    // Search Bar
-                    DummySearchBar(
-                      routeTo: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage()));
-                      },
-                    ),
-                    // Delicious Today - Header
-                    Container(
-                      margin: EdgeInsets.only(top: 12),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    // Delicious Today - ListView
-                    Container(
-                      margin: EdgeInsets.only(top: 4),
-                      height: 220,
-                      child: ListView.separated(
-                        itemCount: featuredRecipe.length,
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            width: 16,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          return FeaturedRecipeCard(data: featuredRecipe[index]);
-                        },
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          // Section 2 - Recommendation Recipe
-          Container(
-            margin: EdgeInsets.only(top: 1),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Content
                 Container(
-                  height: 174,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: recommendationRecipe.length,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    separatorBuilder: (context, index) {
-                      return SizedBox(width: 16);
-                    },
-                    itemBuilder: (context, index) {
-                      return RecommendationRecipeCard(data: recommendationRecipe[index]);
-                    },
+                  height: 250,
+                  color: Color.fromARGB(255, 7, 77, 50),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // The DummySearchBar at the top
+                        DummySearchBar(
+                          routeTo: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => SearchPage()),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        // Row for the slogan and logo
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Discover your food, one scan at a time.', // Your text
+                                style: TextStyle(
+                                  color: AppColor.secondary, // Custom color
+                                  fontSize: 30, // Font size
+                                  fontWeight: FontWeight.w600, // Optional: Adjust weight if needed
+                                  fontFamily: 'Times', // Optional: Use your desired font family
+                                ),
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/images/BetterBitesLogo.png', // Replace with the path to your logo asset
+                              height: 150, // Set the logo height
+                              width: 150, // Set the logo width
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
           // Section 3 - Newly Posted
           Container(
-            margin: EdgeInsets.only(top: 14),
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,22 +98,34 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Scanned Images',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'inter'),
+                      'Scanned Foods',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'inter',
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewlyPostedPage()));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => NewlyPostedPage()),
+                        );
                       },
-                      child: Text('see all'),
-                      style: TextButton.styleFrom(primary: Colors.black, textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+                      child: Text('See All'),
+                      style: TextButton.styleFrom(
+                        primary: Colors.black,
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 // Content
                 ListView.separated(
                   shrinkWrap: true,
-                  itemCount: 3 ?? newlyPostedRecipe.length,
+                  itemCount: newlyPostedRecipe.length,
                   physics: NeverScrollableScrollPhysics(),
                   separatorBuilder: (context, index) {
                     return SizedBox(height: 16);
@@ -146,7 +138,7 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
