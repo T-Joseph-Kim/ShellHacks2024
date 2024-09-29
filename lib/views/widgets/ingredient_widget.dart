@@ -59,7 +59,7 @@ class _IngredientsWidgetState extends State<IngredientsWidget> {
       children: [
         // Search Bar
         Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(0.0),
           child: TextField(
             controller: _searchController,
             decoration: InputDecoration(
