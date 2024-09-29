@@ -34,6 +34,7 @@ dependencies:
   external_path: ^1.0.3
   media_scanner: ^2.1.0
   carousel_slider: ^4.2.1
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:
