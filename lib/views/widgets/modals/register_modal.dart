@@ -175,278 +175,339 @@ class _RegisterModalState extends State<RegisterModal> {
     );
   }
 
-  // Weight and Height Input Page with Sex Dropdown
-  Widget _buildWeightHeightPage() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Tell Us About Yourself',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
-          ),
-          SizedBox(height: 20),
-          // Weight and Age Input Row
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  title: 'Weight (lbs)',
-                  hint: 'e.g. 150',
-                  controller: _weightController,
-                ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: CustomTextField(
-                  title: 'Age',
-                  hint: 'e.g. 42',
-                  controller: _ageController,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          // Height Input Row
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  title: 'Height (feet)',
-                  hint: 'e.g. 5',
-                  controller: _heightFeetController,
-                ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: CustomTextField(
-                  title: 'Height (inches)',
-                  hint: 'e.g. 11',
-                  controller: _heightInchesController,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          // Sex Dropdown Row
-          Text(
-            '  Sex',
-            style: TextStyle(color: AppColor.secondary, fontSize: 14, fontFamily: 'inter')
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  value: _selectedSex,
-                  items: _sexOptions.map((sex) {
-                    return DropdownMenuItem(
-                      value: sex,
-                      child: Text(
-                        sex,
-                        style: TextStyle(
-                          color: AppColor.primary,
-                          fontFamily: 'inter',
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    labelText: 'e.g. Female',
-                    labelStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AppColor.primary),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AppColor.primary, width: 2),
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedSex = value;
-                    });
-                  },
-                  icon: Icon(Icons.arrow_drop_down, color: AppColor.primary),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-
-  // Ethnicity and Allergies Selection Page
-  Widget _buildEthnicityAllergyPage() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch, // Make content stretch horizontally
-        children: [
-          Text(
-            'Tell Us About Yourself',
-            textAlign: TextAlign.center, // Center-align the title
-            style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter')
-          ),
-          SizedBox(height: 20),
-          // Styled DropdownButtonFormField for ethnicity
-          Text(
-            '  Ethnicity',
-            style: TextStyle(color: AppColor.secondary, fontSize: 14, fontFamily: 'inter')
-          ),
-          SizedBox(height: 10),
-          DropdownButtonFormField<String>(
-            value: _selectedEthnicity,
-            items: _ethnicityOptions.map((ethnicity) {
-              return DropdownMenuItem(
-                value: ethnicity,
-                child: Text(
-                  ethnicity,
-                  style: TextStyle(
-                    color: AppColor.primary, // Adjust text color
-                    fontFamily: 'inter',
-                  ),
-                ),
-              );
-            }).toList(),
-            decoration: InputDecoration(
-              labelText: 'e.g. Asian',
-              labelStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
-              filled: true,
-              fillColor: Colors.white, // Background color of the dropdown
-              contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: AppColor.primary), // Border color
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: AppColor.primary, width: 2),
+// Weight and Height Input Page with Sex Dropdown
+Widget _buildWeightHeightPage() {
+  return SingleChildScrollView(
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Tell Us About Yourself',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
+        ),
+        SizedBox(height: 20),
+        // Weight and Age Input Row
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                title: 'Weight (lbs)',
+                hint: 'e.g. 150',
+                controller: _weightController,
               ),
             ),
-            onChanged: (value) {
-              setState(() {
-                _selectedEthnicity = value;
-              });
-            },
-            icon: Icon(Icons.arrow_drop_down, color: AppColor.primary), // Dropdown icon color
-          ),
-          SizedBox(height: 20),
-          // Styled Wrap for allergies
-          Text(
-            '  Do You Have Food Allergies?',
-            style: TextStyle(color: AppColor.secondary, fontSize: 15, fontFamily: 'inter')
-          ),
-          SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 4, // Adjust vertical spacing between chips
-            children: _allergyOptions.map((allergy) {
-              return ChoiceChip(
-                label: Text(
-                  allergy,
-                  style: TextStyle(
-                    color: _selectedAllergies.contains(allergy)
-                        ? AppColor.secondary // Selected chip text color
-                        : AppColor.primary, // Unselected chip text color
-                    fontFamily: 'inter',
+            SizedBox(width: 10),
+            Expanded(
+              child: CustomTextField(
+                title: 'Age',
+                hint: 'e.g. 42',
+                controller: _ageController,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 20),
+        // Height Input Row
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                title: 'Height (feet)',
+                hint: 'e.g. 5',
+                controller: _heightFeetController,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: CustomTextField(
+                title: 'Height (inches)',
+                hint: 'e.g. 11',
+                controller: _heightInchesController,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 20),
+        // Sex Dropdown Row
+        Text(
+          '  Sex',
+          style: TextStyle(color: AppColor.secondary, fontSize: 14, fontFamily: 'inter'),
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                value: _selectedSex,
+                items: _sexOptions.map((sex) {
+                  return DropdownMenuItem(
+                    value: sex,
+                    child: Text(
+                      sex,
+                      style: TextStyle(
+                        color: AppColor.primary,
+                        fontFamily: 'inter',
+                      ),
+                    ),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: 'e.g. Female',
+                  labelStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                    borderSide: BorderSide(color: AppColor.primary),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                    borderSide: BorderSide(color: AppColor.primary, width: 2),
                   ),
                 ),
-                selected: _selectedAllergies.contains(allergy),
-                selectedColor: AppColor.primary, // Background color when selected
-                backgroundColor: Colors.grey[200], // Background color when not selected
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(
-                    color: _selectedAllergies.contains(allergy)
-                        ? AppColor.primary
-                        : Colors.grey[400]!, // Border color
-                  ),
-                ),
-                onSelected: (selected) {
+                onChanged: (value) {
                   setState(() {
-                    if (selected) {
-                      _selectedAllergies.add(allergy);
-                    } else {
-                      _selectedAllergies.remove(allergy);
-                    }
+                    _selectedSex = value;
                   });
                 },
-              );
-            }).toList(),
+                icon: Icon(Icons.arrow_drop_down, color: AppColor.primary),
+                dropdownColor: Colors.white, // Background color for the dropdown menu
+                // Styling the dropdown menu items
+                style: TextStyle(
+                  color: AppColor.primary,
+                  fontFamily: 'inter',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+// Ethnicity and Allergies Selection Page
+Widget _buildEthnicityAllergyPage() {
+  return SingleChildScrollView(
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch, // Make content stretch horizontally
+      children: [
+        Text(
+          'Tell Us About Yourself',
+          textAlign: TextAlign.center, // Center-align the title
+          style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
+        ),
+        SizedBox(height: 20),
+        // Styled DropdownButtonFormField for ethnicity
+        Text(
+          '  Ethnicity',
+          style: TextStyle(color: AppColor.secondary, fontSize: 14, fontFamily: 'inter'),
+        ),
+        SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          value: _selectedEthnicity,
+          items: _ethnicityOptions.map((ethnicity) {
+            return DropdownMenuItem(
+              value: ethnicity,
+              child: Text(
+                ethnicity,
+                style: TextStyle(
+                  color: AppColor.primary, // Adjust text color
+                  fontFamily: 'inter',
+                ),
+              ),
+            );
+          }).toList(),
+          decoration: InputDecoration(
+            labelText: 'e.g. Asian',
+            labelStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.6)),
+            filled: true,
+            fillColor: Colors.white, // Background color of the dropdown
+            contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10), // Rounded corners
+              borderSide: BorderSide(color: AppColor.primary), // Border color
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10), // Rounded corners
+              borderSide: BorderSide(color: AppColor.primary, width: 2),
+            ),
           ),
-          SizedBox(height: 20),
-          // Submit Button
-          ElevatedButton(
-            onPressed: _showSummaryDialog,
+          onChanged: (value) {
+            setState(() {
+              _selectedEthnicity = value;
+            });
+          },
+          icon: Icon(Icons.arrow_drop_down, color: AppColor.primary), // Dropdown icon color
+          dropdownColor: Colors.white, // Background color for the dropdown menu
+          // Styling the dropdown menu items
+          style: TextStyle(
+            color: AppColor.primary,
+            fontFamily: 'inter',
+          ),
+        ),
+        SizedBox(height: 20),
+        // Styled Wrap for allergies
+        Text(
+          '  Do You Have Food Allergies?',
+          style: TextStyle(color: AppColor.secondary, fontSize: 15, fontFamily: 'inter'),
+        ),
+        SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 4, // Adjust vertical spacing between chips
+          children: _allergyOptions.map((allergy) {
+            return ChoiceChip(
+              label: Text(
+                allergy,
+                style: TextStyle(
+                  color: _selectedAllergies.contains(allergy)
+                      ? AppColor.secondary // Selected chip text color
+                      : AppColor.primary, // Unselected chip text color
+                  fontFamily: 'inter',
+                ),
+              ),
+              selected: _selectedAllergies.contains(allergy),
+              selectedColor: AppColor.primary, // Background color when selected
+              backgroundColor: Colors.grey[200], // Background color when not selected
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(
+                  color: _selectedAllergies.contains(allergy)
+                      ? AppColor.primary
+                      : Colors.grey[400]!, // Border color
+                ),
+              ),
+              onSelected: (selected) {
+                setState(() {
+                  if (selected) {
+                    _selectedAllergies.add(allergy);
+                  } else {
+                    _selectedAllergies.remove(allergy);
+                  }
+                });
+              },
+            );
+          }).toList(),
+        ),
+        SizedBox(height: 20),
+        // Submit Button
+        ElevatedButton(
+          onPressed: _showSummaryDialog,
+          child: Text(
+            'Submit',
+            style: TextStyle(
+              color: AppColor.primary,
+              fontFamily: 'inter',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: AppColor.secondary,
+            padding: EdgeInsets.symmetric(vertical: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+  // Show a dialog with the input summary
+void _showSummaryDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: Color.fromARGB(255, 242, 242, 242), // Light background color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Rounded corners
+        ),
+        title: Text(
+          'Summary',
+          style: TextStyle(
+            fontFamily: 'inter',
+            fontWeight: FontWeight.bold,
+            color: AppColor.primary, // Primary color for title text
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSummaryRow('Email:', _emailController.text),
+            _buildSummaryRow('Name:', _fullNameController.text),
+            _buildSummaryRow('Weight:', '${_weightController.text} lbs'),
+            _buildSummaryRow('Height:', '${_heightFeetController.text}\' ${_heightInchesController.text}"'),
+            _buildSummaryRow('Sex:', _selectedSex ?? 'Not selected'),
+            _buildSummaryRow('Ethnicity:', _selectedEthnicity ?? 'Not selected'),
+            _buildSummaryRow('Allergies:', _selectedAllergies.isNotEmpty ? _selectedAllergies.join(', ') : 'None'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: Text(
-              'Submit',
+              'Close',
               style: TextStyle(
-                color: AppColor.primary,
-                fontFamily: 'inter',
+                color: AppColor.primary, // Secondary color for buttons
                 fontWeight: FontWeight.bold,
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              primary: AppColor.secondary,
-              padding: EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PageSwitcher()));
+            },
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                color: AppColor.primary2,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
+      );
+    },
+  );
+}
 
-  // Show a dialog with the input summary
-  void _showSummaryDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Summary'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Email: ${_emailController.text}'),
-              Text('Name: ${_fullNameController.text}'),
-              Text('Weight: ${_weightController.text} lbs'),
-              Text('Height: ${_heightFeetController.text}\' ${_heightInchesController.text}"'),
-              Text('Sex: ${_selectedSex ?? 'Not selected'}'),
-              Text('Ethnicity: ${_selectedEthnicity ?? 'Not selected'}'),
-              Text('Allergies: ${_selectedAllergies.isNotEmpty ? _selectedAllergies.join(', ') : 'None'}'),
-            ],
+  // Helper method for building summary rows
+  Widget _buildSummaryRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: RichText(
+        text: TextSpan(
+          text: '$label ',
+          style: TextStyle(
+            fontFamily: 'inter',
+            fontWeight: FontWeight.bold,
+            color: AppColor.primarySoft, // Secondary color for labels
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Close'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PageSwitcher()));
-              },
-              child: Text('Submit'),
+          children: [
+            TextSpan(
+              text: value,
+              style: TextStyle(
+                fontFamily: 'inter',
+                fontWeight: FontWeight.normal,
+                color: AppColor.primarySoft, // Default color for values
+              ),
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }
