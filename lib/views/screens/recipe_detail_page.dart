@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hungry/models/core/recipe.dart';
-import 'package:hungry/views/screens/full_screen_image.dart';
 import 'package:hungry/views/utils/AppColor.dart';
 import 'package:hungry/views/widgets/climate_footprint_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart'; // For Bar Chart
+import 'package:hungry/views/widgets/ingredient_widget.dart';
 import 'package:lottie/lottie.dart';
-import '../../models/core/nutrient.dart';
 import '../widgets/nutrients_widget.dart'; // For Hand Animations
 
 class RecipeDetailPage extends StatefulWidget {
@@ -274,16 +273,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
           controller: _tabController,
           children: [
             // Ingredients Tab
-            ListView.builder(
-              padding: EdgeInsets.all(16.0),
-              itemCount: recipe.ingredients?.length ?? 0,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Icon(Icons.check),
-                  title: Text(recipe.ingredients![index]),
-                );
-              },
-            ),
+            Padding(padding: const EdgeInsets.all(5.0),
+            child:IngredientsWidget(ingredients: recipe.ingredients ?? [])),
             // Health Tab - Now without Bar Chart
             Padding(
             padding: const EdgeInsets.all(5.0), 
@@ -291,7 +282,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage>
             // Footprint Tab
               ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(5.0),
               child: ClimateFootprintTile(data: recipe.climateFootprint),
             ),
           ],
