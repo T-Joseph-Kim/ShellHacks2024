@@ -31,7 +31,7 @@ class CustomTextField extends StatelessWidget {
             padding: EdgeInsets.only(left: 8),
             child: Text(
               '$title',
-              style: TextStyle(color: Colors.grey, fontSize: 14),
+              style: TextStyle(color: AppColor.secondary, fontSize: 14),
             ),
           ),
           Container(
@@ -46,7 +46,7 @@ class CustomTextField extends StatelessWidget {
               obscureText: obsecureText,
               decoration: InputDecoration(
                 hintText: '$hint',
-                hintStyle: TextStyle(fontSize: 14, color: Colors.grey[400]),
+                hintStyle: TextStyle(fontSize: 14, color: Color.fromARGB(255, 50, 50, 50)),
                 contentPadding: EdgeInsets.only(left: 16),
                 border: InputBorder.none,
               ),

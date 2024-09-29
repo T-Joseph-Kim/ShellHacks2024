@@ -12,7 +12,7 @@ class LoginModal extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 70/ 100,
           padding: EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 16),
-          decoration: BoxDecoration(color: AppColor.primary, borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+          decoration: BoxDecoration(color: Color.fromARGB(255, 7, 77, 50), borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
           child: ListView(
             shrinkWrap: true,
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -28,11 +28,13 @@ class LoginModal extends StatelessWidget {
                 ),
               ),
               // header
-              Container(
-                margin: EdgeInsets.only(bottom: 24),
-                child: Text(
-                  'Login',
-                  style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
+              Center(
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: AppColor.secondary, fontSize: 22, fontWeight: FontWeight.w700, fontFamily: 'inter'),
+                  ),
                 ),
               ),
               // Form

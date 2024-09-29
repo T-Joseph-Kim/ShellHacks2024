@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('Hungry?', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w700)),
+        title: Text('BetterBites', style: TextStyle(fontFamily: 'inter', fontWeight: FontWeight.w700)),
         showProfilePhoto: true,
         profilePhoto: AssetImage('assets/images/ProfilePicture.jpg'),
         profilePhotoOnPressed: () {
@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
               children: [
                 Container(
                   height: 245,
-                  color: AppColor.primary,
+                  color: Color.fromARGB(255, 7, 77, 50),
                 ),
                 // Section 1 - Content
                 Column(
@@ -55,22 +55,6 @@ class HomePage extends StatelessWidget {
                       margin: EdgeInsets.only(top: 12),
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Delicious Today',
-                            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'inter'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliciousTodayPage()));
-                            },
-                            child: Text('see all'),
-                            style: TextButton.styleFrom(primary: Colors.white, textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
-                          ),
-                        ],
-                      ),
                     ),
                     // Delicious Today - ListView
                     Container(
@@ -99,19 +83,10 @@ class HomePage extends StatelessWidget {
           ),
           // Section 2 - Recommendation Recipe
           Container(
-            margin: EdgeInsets.only(top: 16),
+            margin: EdgeInsets.only(top: 1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
-                Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Today recomendation based on your taste...',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
                 // Content
                 Container(
                   height: 174,
@@ -144,7 +119,7 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Newly Posted',
+                      'Scanned Images',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'inter'),
                     ),
                     TextButton(

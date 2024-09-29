@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
                   sigmaY: 3.0, // Adjust the blur intensity vertically
                 ),
                 child: Image.asset(
-                  'assets/images/PackagedFoods2.png',
+                  'assets/images/WelcomeBackground.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -31,7 +31,7 @@ class WelcomePage extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(left: 16, right: 16, bottom: 32),
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 70 / 100,
+                height: MediaQuery.of(context).size.height * 80 / 100,
                 decoration: BoxDecoration(
                   gradient: AppColor.linearBlackBottom,
                 ),
@@ -44,18 +44,19 @@ class WelcomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.only(bottom: 25),
                           child: Image.asset(
                             'assets/images/BetterBitesLogo.png', // Replace with your logo image path
-                            height: 300, // Adjust the height as needed
+                            height: 350, // Adjust the height as needed
                           ),
                         ),
                         Text(
-                          "Scan, Learn, Eat Better",
+                          "Nutrition Made Personal",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColor.secondary,
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
+                            fontFamily: 'Times',
                             shadows: [
                               Shadow(
                                 blurRadius: 10.0,
@@ -106,7 +107,7 @@ class WelcomePage extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              primary: AppColor.primarySoft,
+                              primary: AppColor.primary,
                             ),
                           ),
                         ),
