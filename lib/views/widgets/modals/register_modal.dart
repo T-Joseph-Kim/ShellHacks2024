@@ -266,7 +266,7 @@ Widget _buildWeightHeightPage() {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10), // Rounded corners
-                    borderSide: BorderSide(color: AppColor.primary, width: 2),
+                    borderSide: BorderSide(color: AppColor.primary),
                   ),
                 ),
                 onChanged: (value) {
@@ -336,7 +336,7 @@ Widget _buildEthnicityAllergyPage() {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10), // Rounded corners
-              borderSide: BorderSide(color: AppColor.primary, width: 2),
+              borderSide: BorderSide(color: AppColor.primary),
             ),
           ),
           onChanged: (value) {
