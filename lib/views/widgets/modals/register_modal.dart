@@ -50,7 +50,7 @@ class _RegisterModalState extends State<RegisterModal> {
           height: MediaQuery.of(context).size.height * 85 / 100,
           padding: EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 16),
           decoration: BoxDecoration(
-            color: AppColor.primarySoft,
+            color: Color.fromARGB(255, 7, 77, 50),
             borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           ),
           child: Column(
@@ -151,11 +151,11 @@ class _RegisterModalState extends State<RegisterModal> {
             child: RichText(
               text: TextSpan(
                 text: 'Have an account? ',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: AppColor.secondary, fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
                     style: TextStyle(
-                      color: AppColor.primary,
+                      color: Colors.white,
                       fontWeight: FontWeight.w700,
                       fontFamily: 'inter',
                     ),
@@ -254,7 +254,7 @@ class _RegisterModalState extends State<RegisterModal> {
                 fontWeight: FontWeight.bold
               ),
               filled: true,
-              fillColor: AppColor.secondary, // Background color of the dropdown
+              fillColor: Colors.white, // Background color of the dropdown
               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),

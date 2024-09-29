@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:hungry/views/utils/AppColor.dart';
 import 'camera_page.dart'; // Import CameraPage if you need to navigate back
 
 class PreviewPage extends StatefulWidget {
@@ -71,13 +70,22 @@ class _PreviewPageState extends State<PreviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Preview'),
-        backgroundColor: Colors.black,
+        title: Text('Image Preview', style: TextStyle(fontFamily: 'inter', color: AppColor.secondary)),
+        backgroundColor: AppColor.primary,
       ),
       body: Stack(
         children: [
+          // Setting a background color for the Scaffold body
+          Container(
+            color: AppColor.primary, // Adjust this to your desired background color
+            width: double.infinity,
+            height: double.infinity,
+          ),
           Center(
-            child: Image.file(widget.image),
+            child: Image.file(
+              widget.image,
+              fit: BoxFit.cover, // Ensures the image covers the entire area
+            ),
           ),
           if (isLoading)
             Container(
@@ -86,21 +94,54 @@ class _PreviewPageState extends State<PreviewPage> {
             ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      bottomNavigationBar: Container(
+        color: AppColor.primary, // Set the background color of the bottom navigation bar
+        padding: const EdgeInsets.all(16.0), // Padding for the navigation bar content
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // Minimize the height to fit content
           children: [
-            ElevatedButton(
-              onPressed: retakePicture,
-              style: ElevatedButton.styleFrom(
-                primary: Colors.grey,
+            Text(
+              'Image to be Scanned',
+              style: TextStyle(
+                color: AppColor.secondary, // Text color for the label
+                fontWeight: FontWeight.bold,
+                fontFamily: 'inter',
+                fontSize: 18,
               ),
-              child: Text('Retake'),
             ),
-            ElevatedButton(
-              onPressed: isLoading ? null : uploadImage,
-              child: Text('Proceed'),
+            SizedBox(height: 10), // Space between the text and buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: retakePicture,
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.secondary, // Background color for the button
+                  ),
+                  child: Text(
+                    'Retake',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'inter',
+                      color: AppColor.primary, // Text color
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: isLoading ? null : uploadImage,
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.secondary, // Background color for the button
+                  ),
+                  child: Text(
+                    'Proceed',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'inter',
+                      color: AppColor.primary, // Text color
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

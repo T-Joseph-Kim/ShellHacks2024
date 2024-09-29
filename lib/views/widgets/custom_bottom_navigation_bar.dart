@@ -23,6 +23,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         child: SizedBox(
           height: 70,
           child: BottomNavigationBar(
+            backgroundColor: Colors.white.withOpacity(0.9),
             currentIndex: widget.selectedIndex,
             onTap: widget.onItemTapped as void Function(int)?,
             showSelectedLabels: false,
@@ -30,13 +31,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             elevation: 0,
             items: [
               (widget.selectedIndex == 0)
-                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/home-filled.svg', color: AppColor.primary), label: '')
+                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/home-filled.svg', color: Color.fromARGB(255, 7, 77, 50)), label: '')
                   : BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/home.svg', color: Colors.grey[600]), label: ''),
               (widget.selectedIndex == 1)
-                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/camera-filled.svg', color: AppColor.primary, height: 28, width: 26), label: '')
+                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/camera-filled.svg', color: Color.fromARGB(255, 7, 77, 50), height: 28, width: 26), label: '')
                   : BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/camera.svg', color: Colors.grey[600], height: 28, width: 26), label: ''),
               (widget.selectedIndex == 2)
-                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/profile-filled.svg', color: AppColor.primary), label: '')
+                  ? BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/profile-filled.svg', color: Color.fromARGB(255, 7, 77, 50)), label: '')
                   : BottomNavigationBarItem(icon: SvgPicture.asset('assets/icons/profile.svg', color: Colors.grey[600]), label: ''),
             ],
           ),
